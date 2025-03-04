@@ -307,8 +307,8 @@ async def main():
         DocumentSource(
             name="local_pdfs",
             pdf_paths=[
-                "docs/document1.pdf",
-                "docs/document2.pdf"
+                "docs/2005.11401v4.pdf",
+                "docs/2312.10997v5.pdf"
                 # Add more PDF paths as needed
             ]
         )
