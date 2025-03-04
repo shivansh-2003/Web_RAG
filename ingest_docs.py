@@ -120,8 +120,11 @@ async def get_embedding(text: str) -> List[float]:
         )
         return response.data[0].embedding
     except Exception as e:
-        print(f"Error getting embedding: {e}")
-        return [0] * 1536  # Return zero vector on error
+        if "invalid_api_key" in str(e):
+            print("Error: Invalid API key provided. Please check your OpenAI API key.")
+        else:
+            print(f"Error getting embedding: {e}")
+        return [0] * 1536  # Return zero vector on errorector on error
 
 async def process_chunk(chunk: str, chunk_number: int, url: str, source: str) -> ProcessedChunk:
     """Process a single chunk of text."""
@@ -307,8 +310,8 @@ async def main():
         DocumentSource(
             name="local_pdfs",
             pdf_paths=[
-                "docs/2005.11401v4.pdf",
-                "docs/2312.10997v5.pdf"
+                "docs/document1.pdf",
+                "docs/document2.pdf"
                 # Add more PDF paths as needed
             ]
         )
