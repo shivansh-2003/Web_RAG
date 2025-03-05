@@ -102,7 +102,7 @@ async def get_title_and_summary(chunk: str, url: str) -> Dict[str, str]:
             model=os.getenv("LLM_MODEL", "gpt-4o-mini"),
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": f"URL: {url}\n\nContent:\n{chunk[:1000]}..."}
+                {"role": "user", "content": f"URL: {url}\n\nContent:\n{chunk[:1000]}..."}  # Send first 1000 chars for context
             ],
             response_format={ "type": "json_object" }
         )
@@ -110,7 +110,7 @@ async def get_title_and_summary(chunk: str, url: str) -> Dict[str, str]:
     except Exception as e:
         print(f"Error getting title and summary: {e}")
         return {"title": "Error processing title", "summary": "Error processing summary"}
-
+    
 async def get_embedding(text: str) -> List[float]:
     """Get embedding vector from OpenAI."""
     try:
@@ -151,6 +151,7 @@ async def process_chunk(chunk: str, chunk_number: int, url: str, source: str) ->
         metadata=metadata,
         embedding=embedding
     )
+
 
 async def insert_chunk(chunk: ProcessedChunk):
     """Insert a processed chunk into Supabase."""
@@ -291,10 +292,6 @@ async def main():
             sitemap_url="https://ai.pydantic.dev/sitemap.xml"
         ),
         DocumentSource(
-            name="langchain",
-            sitemap_url="https://python.langchain.com/sitemap.xml"
-        ),
-        DocumentSource(
             name="langgraph",
             sitemap_url="https://python.langgraph.com/sitemap.xml"
         ),
@@ -310,8 +307,8 @@ async def main():
         DocumentSource(
             name="local_pdfs",
             pdf_paths=[
-                "docs/document1.pdf",
-                "docs/document2.pdf"
+                "docs/2005.11401v4.pdf",
+                "docs/2312.10997v5.pdf"
                 # Add more PDF paths as needed
             ]
         )
